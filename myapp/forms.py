@@ -34,3 +34,9 @@ class TeacherForm(forms.ModelForm):
 class LoginForm(forms.Form):
     username = forms.CharField(label = 'Username', max_length = 12)
     password = forms.CharField(label = 'Password',min_length = 6, widget = forms.PasswordInput())
+
+class AnswerForm(forms.ModelForm):
+
+    class Meta:
+        model = Answer
+        fields = ["image",]

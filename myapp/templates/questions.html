@@ -92,9 +92,10 @@
             <h1>Question</h1>
           </div>
           <div class="upload-sec">
-            <form action="">
-              <input type="file" id="myFile" name="filename" />
-              <input type="submit" />
+            <form action="{% url 'quiz_questions' pk1=pk1 pk2=pk2 pk3=pk3 %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <input type="file" name="myfile">
+              <button type="submit">Upload</button>
             </form>
           </div>
         </div>

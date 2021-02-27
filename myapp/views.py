@@ -13,13 +13,16 @@ from .forms import *
 from .models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-
-def test_view(request):
-    q1 = Answer.objects.all()
+from django.core.files.storage import FileSystemStorage
+def grade_file(s):
+    # q1 = Answer.objects.all()
     region = "centralindia" 
     api_key = "cc02edee73f140d38d17232da9899d20"
-    path_to_file = "."+q1[0].image.url
+    # path_to_file = "."+q1[0].image.url
+    path_to_file = "./myapp/uploads"+s
+    print(path_to_file,'###################')
     p  = cv2.imread(path_to_file)
+    print(p,'Image')
     cropped_image = PILImage.fromarray(p)
     buffer = BytesIO()
     cropped_image.save(buffer, format="JPEG")
@@ -56,7 +59,8 @@ def test_view(request):
         li2.append(i.strip(".,!? ").lower())
     print (li2)
     contxt = {'li':li}
-    return render(request, 'test.html',contxt)
+    return li2
+    # return render(request, 'test.html',contxt)
 
 def RegisterTeacher(request):
     if request.user.is_authenticated:
@@ -112,7 +116,7 @@ def signin(request):
             return redirect('dashboard_student',pk = pk)
         else:
             pk = request.user.username
-            return redirect('dashboard_teacher',pk = pk)
+            return redirect('dashboard_student',pk = pk)
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
@@ -155,18 +159,20 @@ def result(request,pk1,pk2):
 def quiz_start(request,pk1,pk2):
 
     quiz1 = Quiz.objects.filter(quiz_name=pk2)
-    quiz = quiz1[0]
+    quiz = quiz1.first()
     questions = Question.objects.filter(quiz=quiz)
     id_arr = []
     for i in questions:
         id_arr.append(i.ques_id)
 
     id_arr.sort()
+    if len(id_arr)==0:
+        return redirect('dashboard_student', pk1)
     pk3 = id_arr[0]
     return redirect('quiz_questions', pk1=pk1, pk2=pk2, pk3=pk3)
 
 def quiz_questions(request,pk1,pk2,pk3):
-    quiz = Quiz.objects.filter(quiz_name=pk2)[0]
+    quiz = Quiz.objects.filter(quiz_name=pk2).first()
     questions = Question.objects.filter(quiz=quiz)
     id_arr = []
     for i in questions:
@@ -179,16 +185,24 @@ def quiz_questions(request,pk1,pk2,pk3):
     ans = Answer.objects.filter(student=stud)
     for i in ans:
         ans_arr.append(i.question)
-
+    form = AnswerForm()
     if request.method =="POST":
         if pk3 in ans_arr:
             messages.info(request, "You have already submitted this answer!")
         else:
+            if request.FILES['myfile']:
+                myfile = request.FILES['myfile']
+                fs = FileSystemStorage(location = 'myapp/uploads/')
+                filename = fs.save(myfile.name, myfile)
+                uploaded_file_url = fs.url(filename)
+                l1 = grade_file(uploaded_file_url)
+                print(uploaded_file_url)
+                print(filename)
             #Save image PILLOW
             messages.info(request, "Answer submitted successfully")
 
         return redirect(quiz_questions,pk1=pk1,pk2=pk2,pk3=pk3)
-    params = {"arr":id_arr}
+    params = {"arr":id_arr,"form":form,'pk1':pk1,'pk2':pk2,'pk3':pk3}
     return render(request,"questions.html",params)
         
         
