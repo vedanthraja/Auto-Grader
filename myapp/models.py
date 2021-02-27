@@ -28,23 +28,29 @@ class Student(models.Model):
         return self.name
 
 class Quiz(models.Model):
+    quiz_name = models.CharField(max_length = 50)
     quiz_id = models.AutoField(primary_key = True)
     teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
-    student = models.ForeignKey(Student, on_delete = models.CASCADE, null=True)
+    # student = models.ForeignKey(Student, on_delete = models.CASCADE, blank = True, null=True)
 
     def __str__(self):
-        return self.quiz_id
+        return str(self.quiz_id)
+
+class Quiz_Attempted(models.Model):
+    quiz = models.ForeignKey(Quiz, on_delete = models.CASCADE)
+    student = models.ForeignKey(Student, on_delete = models.CASCADE)
 
 class Question(models.Model):
+    ques_id = models.AutoField(primary_key = True)
     ques_text = models.TextField()
     keywords = models.TextField()
     quiz = models.ForeignKey(Quiz, on_delete = models.CASCADE)
-
+    total_marks = models.DecimalField(max_digits=3, decimal_places=0, null=True)
 class Answer(models.Model):
     # student = models.ForeigKey(student)
     image = models.ImageField(upload_to='myapp/uploads/')
-    ans_text = models.TextField(null = True)
+    ans_text = models.TextField(null = True, blank = True)
     question = models.ForeignKey(Question, on_delete = models.CASCADE)
     student = models.ForeignKey(Student, on_delete = models.CASCADE, null = True)
-    grade = models.DecimalField(max_digits=3, decimal_places=0, null=True)
+    grade = models.DecimalField(max_digits=3, decimal_places=0, null=True, blank = True)
 

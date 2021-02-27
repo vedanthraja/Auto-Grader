@@ -162,7 +162,12 @@ def index(request):
 
 def signin(request):
     if request.user.is_authenticated:
-        return redirect('index')
+        if request.user.is_teacher==0:
+            pk = request.user.username
+            return redirect('dashboard_student',pk = pk)
+        # else:
+        #     pk = request.user.username
+        #     return redirect('dashboard_student',pk = pk)
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
@@ -172,9 +177,14 @@ def signin(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('index')
+                pk = request.user.username
+                return redirect('dashboard_student',pk = pk)
             else:
                 messages.info(request, 'Username OR password is incorrect')
         form = LoginForm()
         return render(request, 'login.html', {"form":form})
-    return render (request, 'login.html')
+
+def dashboard_student(request,pk):
+    q1 = Quiz.objects.all()
+    context = {'q1':q1}
+    return render(request, 'dashboard.html',context)

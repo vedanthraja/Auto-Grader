@@ -6,5 +6,6 @@ urlpatterns = [
     path('registerStudent/',views.RegisterStudent, name="RegisterStudent"),
     path('registerTeacher/',views.RegisterTeacher, name="RegisterTeacher"),
     path('index/',views.index, name="index"),
-    path('login/',views.signin, name="login")
+    path('login/',views.signin, name="login"),
+    path('dashboard_student/<str:pk>/',views.dashboard_student,name="dashboard_student")
 ]
