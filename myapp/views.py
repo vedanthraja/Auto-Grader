@@ -14,68 +14,28 @@ from .models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
-# Create your views here.
-# def test_view(request):
-#     q1 = Answer.objects.all()
-#     region = "centralindia" 
-#     api_key = "cc02edee73f140d38d17232da9899d20"
-#     path_to_file = r"E:\Hackathons\Auto-Grader\uploads\img1.png"
-#     headers = {
-#     "Ocp-Apim-Subscription-Key": api_key,
-#     'Content-Type': 'application/octet-stream'}
-#     p = cv2.imread(path_to_file)
-#     cropped_image = PILImage.fromarray(p)
-#     buffer = BytesIO()
-#     cropped_image.save(buffer, format="JPEG")
-#     image_bytes = buffer.getvalue()
-
-
-
 def test_view(request):
     q1 = Answer.objects.all()
     region = "centralindia" 
     api_key = "cc02edee73f140d38d17232da9899d20"
-    # path_to_file = request.build_absolute_uri(q1[0].image.url)
-    # path_to_file = r"\uploads\sample.jpeg"  #This is the correct one
-    # BASE_DIR = Path(__file__).resolve().parent.parent
-    # BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-    # path_to_file1 = BASE_DIR.join(q1[0].image.url)
-    # print(path_to_file1)
-    # Read file
     path_to_file = "."+q1[0].image.url
     p  = cv2.imread(path_to_file)
     cropped_image = PILImage.fromarray(p)
     buffer = BytesIO()
     cropped_image.save(buffer, format="JPEG")
     image_bytes = buffer.getvalue()
-    # with open(path_to_file, 'rb') as f:
-    #     data = f.read()
-
-    # Set request headers
     headers = dict()
     headers['Ocp-Apim-Subscription-Key'] = api_key
     headers['Content-Type'] = 'application/octet-stream'
-
-    # Set request querystring parameters
-    # params = {'visualFeatures': 'Color,Categories,Tags,Description,ImageType,Faces,Adult'}
     params = {'language':'en', 'pages':'1','readingOrder':'basic'}
-    #https://centralindia.api.cognitive.microsoft.com/vision/v3.2-preview.2/read/analyzeResults/7aec5573-e709-4203-a329-465d83da1a8d
-    # Make request and process response
     response = requests.post(
             "https://centralindia.api.cognitive.microsoft.com/vision/v3.2-preview.2/read/analyze?language=en&pages=1&readingOrder=basic",
             headers=headers,
             data=image_bytes,
         )
-    # response = requests.request('post', "https://{}.api.cognitive.microsoft.com/vision/v1.0/analyze".format(region), data=image_bytes, headers=headers, params = params)
-    # contxt = {'resp':response}
-    # response_data = response.json()
-    # print(response.headers)
-    # imageId = response_data["requestId"]
-    # params1 = {'operationId':imageId,}
     headers1 = dict()
     headers1['Ocp-Apim-Subscription-Key'] = api_key
     headers1['Content-Type'] = 'application/json'
-    # # contxt = {'imgId':imageId}
     time.sleep(2)
     # urltest = "https://centralindia.api.cognitive.microsoft.com/vision/v3.2-preview.2/read/analyzeResults/"+imageId+"/"
     response1 = requests.request('get',response.headers['Operation-Location'], headers=headers1)
@@ -97,21 +57,6 @@ def test_view(request):
     print (li2)
     contxt = {'li':li}
     return render(request, 'test.html',contxt)
-
-# def RegisterStudent(request):
- 
-#     if request.method == "POST":
-#         form1 = RegisterForm(request.POST, prefix="form1")
-#         form2 = StudentForm(request.POST, prefix="form2")
-#         if form1.is_valid():
-#             form.save()
-
-#             #return redirect("")
-#     else:
-#         form1 = RegisterForm()
-#         form2 = StudentForm()
-
-#     return render(request, "registerStudent.html", {"form1":form1, "form2":form2})
 
 def RegisterTeacher(request):
     if request.user.is_authenticated:
@@ -240,3 +185,43 @@ def Addquiz(request, pk):
         return redirect("dashboard_teacher", pk=pk)
     else:
         return redirect("dashboard_teacher", pk=pk)
+def quiz_start(request,pk1,pk2):
+
+    quiz1 = Quiz.objects.filter(quiz_name=pk2)
+    quiz = quiz1[0]
+    questions = Question.objects.filter(quiz=quiz)
+    id_arr = []
+    for i in questions:
+        id_arr.append(i.ques_id)
+
+    id_arr.sort()
+    pk3 = id_arr[0]
+    return redirect('quiz_questions', pk1=pk1, pk2=pk2, pk3=pk3)
+
+def quiz_questions(request,pk1,pk2,pk3):
+    quiz = Quiz.objects.filter(quiz_name=pk2)[0]
+    questions = Question.objects.filter(quiz=quiz)
+    id_arr = []
+    for i in questions:
+        id_arr.append(i.ques_id)
+
+    id_arr.sort()
+
+    ans_arr = []
+    stud = Student.objects.get(username=pk1)
+    ans = Answer.objects.filter(student=stud)
+    for i in ans:
+        ans_arr.append(i.question)
+
+    if request.method =="POST":
+        if pk3 in ans_arr:
+            messages.info(request, "You have already submitted this answer!")
+        else:
+            #Save image PILLOW
+            messages.info(request, "Answer submitted successfully")
+
+        return redirect(quiz_questions,pk1=pk1,pk2=pk2,pk3=pk3)
+    params = {"arr":id_arr}
+    return render(request,"questions.html",params)
+        
+        
