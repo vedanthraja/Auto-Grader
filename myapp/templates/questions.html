@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Google Fonts Start -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts Ends -->
+    <!-- Links -->
+    <link rel="stylesheet" href="{% static 'css/questions.css' %}" />
+    <title>Quiz Page</title>
+  </head>
+  <body>
+    <div class="nav">
+      <div style="position: fixed; left: 45px">App Name</div>
+      <div style="position: fixed; right: 45px">Login</div>
+    </div>
+
+    <div class="page">
+      <!-- SIDEBAR  STARTS -->
+      <div class="sidebar" style="transform: translateY(2rem); margin: 2rem">
+        <h1 style="text-align: center; padding: 2rem">
+          <span style="border-bottom: 2px solid goldenrod">Navigation</span>
+        </h1>
+        <div
+          class="toc"
+          style="padding-right: 6rem; padding-left: 6rem; padding-top: 2rem"
+        >
+          <div class="number">
+            <span
+              style="background-color: pink; border-radius: 12px; padding: 1rem"
+              >1</span
+            >
+          </div>
+          <div class="number">
+            <span
+              style="background-color: pink; border-radius: 12px; padding: 1rem"
+              >1</span
+            >
+          </div>
+          <div class="number">
+            <span
+              style="background-color: pink; border-radius: 12px; padding: 1rem"
+              >1</span
+            >
+          </div>
+          <div class="number">
+            <span
+              style="background-color: pink; border-radius: 12px; padding: 1rem"
+              >1</span
+            >
+          </div>
+          <div class="number">
+            <span
+              style="background-color: pink; border-radius: 12px; padding: 1rem"
+              >1</span
+            >
+          </div>
+          <div class="number">
+            <span
+              style="background-color: pink; border-radius: 12px; padding: 1rem"
+              >1</span
+            >
+          </div>
+        </div>
+        <div class="submit-section">
+          <button
+            style="
+              background-color: black;
+              color: white;
+              border: none;
+              margin: 0;
+              padding: 0.7rem;
+              border-radius: 6px;
+            "
+          >
+            Submit Test
+          </button>
+        </div>
+      </div>
+      <!-- SIDEBAR  ENDS -->
+      <div class="content">
+        <div class="question" style="transform: translateY(2rem)">
+          <div class="ques">
+            <h1>Question</h1>
+          </div>
+          <div class="upload-sec">
+            <form action="">
+              <input type="file" id="myFile" name="filename" />
+              <input type="submit" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
