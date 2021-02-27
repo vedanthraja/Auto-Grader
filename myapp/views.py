@@ -165,9 +165,9 @@ def signin(request):
         if request.user.is_teacher==0:
             pk = request.user.username
             return redirect('dashboard_student',pk = pk)
-        # else:
-        #     pk = request.user.username
-        #     return redirect('dashboard_student',pk = pk)
+        else:
+            pk = request.user.username
+            return redirect('dashboard_teacher',pk = pk)
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
@@ -188,3 +188,20 @@ def dashboard_student(request,pk):
     q1 = Quiz.objects.all()
     context = {'q1':q1}
     return render(request, 'dashboard.html',context)
+
+def result(request,pk1,pk2):
+    #pk1 = username
+    #pk2 = quiz_name
+    tot_grade = 0
+    quizq = Quiz.objects.get(quiz_name = pk1)
+    studentobj = Student.objects.get(username = pk1)
+    if quizq:
+        quesq = Question.objects.filter(quiz = quizq)
+        for i in quesq:  
+            ansq = Answer.objects.filter(question = i, student = studentobj )
+            if ansq:
+                tot_grade+=ansq[0].grade
+    context = {'tot_grade':tot_grade}
+    att = Quiz_Attempted(quiz = quizq, student = studentobj, tot_grade = tot_grade)
+    att.save()
+    return render(request, 'result.html',context)

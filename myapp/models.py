@@ -28,17 +28,18 @@ class Student(models.Model):
         return self.name
 
 class Quiz(models.Model):
-    quiz_name = models.CharField(max_length = 50)
-    quiz_id = models.AutoField(primary_key = True)
+    quiz_name = models.CharField(max_length = 50, primary_key = True)
+    # quiz_id = models.AutoField(primary_key = True)
     teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
     # student = models.ForeignKey(Student, on_delete = models.CASCADE, blank = True, null=True)
 
     def __str__(self):
-        return str(self.quiz_id)
+        return str(self.quiz_name)
 
 class Quiz_Attempted(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete = models.CASCADE)
     student = models.ForeignKey(Student, on_delete = models.CASCADE)
+    tot_grade = models.DecimalField(max_digits=3, decimal_places=0, null=True)
 
 class Question(models.Model):
     ques_id = models.AutoField(primary_key = True)
