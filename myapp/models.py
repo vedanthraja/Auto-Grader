@@ -20,6 +20,6 @@ class Question(models.Model):
 
 class Answer(models.Model):
     # student = models.ForeigKey(student)
-    image = models.FileField(upload_to='uploads/')
-    ans_text = models.TextField()
+    image = models.ImageField(upload_to='myapp/uploads/')
+    ans_text = models.TextField(null = True)
     question = models.ForeignKey(Question, on_delete = models.CASCADE)
