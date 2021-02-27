@@ -165,9 +165,9 @@ def signin(request):
         if request.user.is_teacher==0:
             pk = request.user.username
             return redirect('dashboard_student',pk = pk)
-        # else:
-        #     pk = request.user.username
-        #     return redirect('dashboard_student',pk = pk)
+        else:
+            pk = request.user.username
+            return redirect('dashboard_teacher',pk = pk)
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
@@ -178,7 +178,12 @@ def signin(request):
             if user is not None:
                 login(request, user)
                 pk = request.user.username
-                return redirect('dashboard_student',pk = pk)
+                if request.user.is_teacher==0:
+                    pk = request.user.username
+                    return redirect('dashboard_student',pk = pk)
+                else:
+                    pk = request.user.username
+                    return redirect('dashboard_teacher',pk = pk)
             else:
                 messages.info(request, 'Username OR password is incorrect')
         form = LoginForm()
@@ -188,3 +193,50 @@ def dashboard_student(request,pk):
     q1 = Quiz.objects.all()
     context = {'q1':q1}
     return render(request, 'dashboard.html',context)
+
+
+def Addquestion(request, pk):
+    form = QuestionForm()
+    print("*******************************************8",pk)
+    if request.method == 'POST':
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            qt = form.cleaned_data.get('ques_text')
+            kw = form.cleaned_data.get('keywords')
+            tm = form.cleaned_data.get('total_marks')
+            # user = CustomUser.objects.create_user(username=user1,email= mail,password=passw, is_teacher=0)
+            # user.save()
+            quiz_obj = Quiz.objects.get(quiz_name=pk)
+            quest = Question.objects.create(ques_text=qt, keywords=kw, total_marks=tm, quiz=quiz_obj)
+            quest.save()
+            messages.success(request, 'Question was created for ' + request.user.username)
+            context = {'form':form}
+            return redirect('addquestion', pk=pk)
+        
+
+    context = {'form':form}
+    return render(request, 'addquestion.html', context)
+
+
+def dashboard_student(request,pk):
+    q1 = Quiz.objects.all()
+    context = {'q1':q1}
+    return render(request, 'dashboard.html',context)
+    
+def dashboard_teacher(request,pk):
+    teacher_obj = Teacher.objects.get(username = request.user.username)
+    q1 = Quiz.objects.filter(teacher = teacher_obj)
+    context = {'q1':q1, "pk": pk}
+    return render(request, 'dash_teacher.html',context)
+
+
+def Addquiz(request, pk):
+    if request.method == 'POST':
+        quiz_name = request.POST.get("quizname")
+        print("*****************************************", quiz_name)
+        t = Teacher.objects.get(username = pk)
+        q = Quiz(quiz_name = quiz_name, teacher = t)
+        q.save()
+        return redirect("dashboard_teacher", pk=pk)
+    else:
+        return redirect("dashboard_teacher", pk=pk)
