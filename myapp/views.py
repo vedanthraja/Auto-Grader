@@ -185,18 +185,22 @@ def Addquiz(request, pk):
         return redirect("dashboard_teacher", pk=pk)
     else:
         return redirect("dashboard_teacher", pk=pk)
-def quiz_start(request,pk1,pk2):
+def quiz_start(request,pk1,pk2, pk3):
 
-    quiz1 = Quiz.objects.filter(quiz_name=pk2)
-    quiz = quiz1[0]
-    questions = Question.objects.filter(quiz=quiz)
-    id_arr = []
-    for i in questions:
-        id_arr.append(i.ques_id)
+    try: 
+        quiz1 = Quiz.objects.filter(quiz_name=pk2)
+        quiz = quiz1[0]
+        questions = Question.objects.filter(quiz=quiz)
+        id_arr = []
+        for i in questions:
+            id_arr.append(i.ques_id)
 
-    id_arr.sort()
-    pk3 = id_arr[0]
-    return redirect('quiz_questions', pk1=pk1, pk2=pk2, pk3=pk3)
+        id_arr.sort()
+        pk3 = id_arr[0]
+        return redirect('quiz_questions', pk1=pk1, pk2=pk2, pk3=pk3)
+
+    except: 
+        return redirect('quiz_questions', pk1=pk1, pk2=pk2, pk3=pk3)
 
 def quiz_questions(request,pk1,pk2,pk3):
     quiz = Quiz.objects.filter(quiz_name=pk2)[0]
