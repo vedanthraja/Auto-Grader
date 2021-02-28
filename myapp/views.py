@@ -14,15 +14,16 @@ from .models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.storage import FileSystemStorage
+import decimal
 def grade_file(s):
     # q1 = Answer.objects.all()
     region = "centralindia" 
     api_key = "cc02edee73f140d38d17232da9899d20"
     # path_to_file = "."+q1[0].image.url
     path_to_file = "./myapp/uploads"+s
-    print(path_to_file,'###################')
+    # print(path_to_file,'###################')
     p  = cv2.imread(path_to_file)
-    print(p,'Image')
+    # print(p,'Image')
     cropped_image = PILImage.fromarray(p)
     buffer = BytesIO()
     cropped_image.save(buffer, format="JPEG")
@@ -190,22 +191,22 @@ def Addquiz(request, pk):
         return redirect("dashboard_teacher", pk=pk)
     else:
         return redirect("dashboard_teacher", pk=pk)
-def quiz_start(request,pk1,pk2, pk3):
+# def quiz_start(request,pk1,pk2, pk3):
 
-    try: 
-        quiz1 = Quiz.objects.filter(quiz_name=pk2)
-        quiz = quiz1[0]
-        questions = Question.objects.filter(quiz=quiz)
-        id_arr = []
-        for i in questions:
-            id_arr.append(i.ques_id)
+#     try: 
+#         quiz1 = Quiz.objects.filter(quiz_name=pk2)
+#         quiz = quiz1[0]
+#         questions = Question.objects.filter(quiz=quiz)
+#         id_arr = []
+#         for i in questions:
+#             id_arr.append(i.ques_id)
 
-        id_arr.sort()
-        pk3 = id_arr[0]
-        return redirect('quiz_questions', pk1=pk1, pk2=pk2, pk3=pk3)
+#         id_arr.sort()
+#         pk3 = id_arr[0]
+#         return redirect('quiz_questions', pk1=pk1, pk2=pk2, pk3=pk3)
 
-    except: 
-        return redirect('quiz_questions', pk1=pk1, pk2=pk2, pk3=pk3)
+#     except: 
+#         return redirect('quiz_questions', pk1=pk1, pk2=pk2, pk3=pk3)
 def result(request,pk1,pk2):
     #pk1 = username
     #pk2 = quiz_name
@@ -264,8 +265,30 @@ def quiz_questions(request,pk1,pk2,pk3):
                 filename = fs.save(myfile.name, myfile)
                 uploaded_file_url = fs.url(filename)
                 l1 = grade_file(uploaded_file_url)
-                print(uploaded_file_url)
-                print(filename)
+                #li is list of detected words
+                quesquer = Question.objects.get(ques_id = pk3)
+                keywords = quesquer.keywords.split()
+                ctr  = len(keywords)
+                ctr1=0
+                for i in keywords:
+                    if i.lower() in l1:
+                        ctr1=ctr1+1
+                grade1 = 0.0
+                # print(ctr1,'^^^^^^')
+                # print(ctr,'THis is ctr')
+                if ctr1>=0.8*ctr:
+                    grade1 = quesquer.total_marks
+                elif ctr1>=0.6*ctr:
+                    grade1 = quesquer.total_marks*decimal.Decimal(0.8)
+                elif ctr1>=0.4*ctr:
+                    grade1 = quesquer.total_marks*decimal.Decimal(0.6)
+                elif ctr1>=0.2*ctr:
+                    grade1 = quesquer.total_marks*decimal.Decimal(0.4)
+                str1 = ' '
+                studobj = Student.objects.get(username = pk1)
+                a = Answer.objects.create(ans_text = str1.join(l1), question = quesquer, student = studobj, grade = grade1)
+                # print(uploaded_file_url)
+                # print(filename)
             #Save image PILLOW
             messages.info(request, "Answer submitted successfully")
 
