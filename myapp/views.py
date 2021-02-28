@@ -137,18 +137,20 @@ def dashboard_student(request,pk):
 def quiz_start(request,pk1,pk2):
 
     quiz1 = Quiz.objects.filter(quiz_name=pk2)
-    quiz = quiz1[0]
+    quiz = quiz1.first()
     questions = Question.objects.filter(quiz=quiz)
     id_arr = []
     for i in questions:
         id_arr.append(i.ques_id)
 
     id_arr.sort()
+    if len(id_arr)==0:
+        return redirect('dashboard_student', pk1)
     pk3 = id_arr[0]
     return redirect('quiz_questions', pk1=pk1, pk2=pk2, pk3=pk3)
 
 def quiz_questions(request,pk1,pk2,pk3):
-    quiz = Quiz.objects.filter(quiz_name=pk2)[0]
+    quiz = Quiz.objects.filter(quiz_name=pk2).first()
     questions = Question.objects.filter(quiz=quiz)
     id_arr = []
     for i in questions:

@@ -9,5 +9,6 @@ urlpatterns = [
     path('login/',views.signin, name="login"),
     path('dashboard_student/<str:pk>/',views.dashboard_student,name="dashboard_student"),
     path('<str:pk1>/<str:pk2>/', views.quiz_start, name="quiz_start"),
-    path('<str:pk1>/<str:pk2>/<str:pk3>', views.quiz_questions, name="quiz_questions")
+    path('<str:pk1>/<str:pk2>/<str:pk3>', views.quiz_questions, name="quiz_questions"),
+    
 ]
