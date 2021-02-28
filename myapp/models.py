@@ -28,7 +28,8 @@ class Student(models.Model):
         return self.name
 
 class Quiz(models.Model):
-    quiz_name = models.CharField(primary_key = True, max_length = 50)
+    quiz_name = models.CharField(primary_key = True, max_length=100)
+    # quiz_id = models.AutoField(primary_key = True)
     teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
     # student = models.ForeignKey(Student, on_delete = models.CASCADE, blank = True, null=True)
 
@@ -38,6 +39,7 @@ class Quiz(models.Model):
 class Quiz_Attempted(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete = models.CASCADE)
     student = models.ForeignKey(Student, on_delete = models.CASCADE)
+    tot_grade = models.DecimalField(max_digits=3, decimal_places=0, null=True)
 
 class Question(models.Model):
     ques_id = models.AutoField(primary_key = True)
@@ -45,6 +47,7 @@ class Question(models.Model):
     keywords = models.TextField()
     quiz = models.ForeignKey(Quiz, on_delete = models.CASCADE)
     total_marks = models.DecimalField(max_digits=3, decimal_places=0, null=True)
+
 class Answer(models.Model):
     # student = models.ForeigKey(student)
     image = models.ImageField(upload_to='myapp/uploads/')
