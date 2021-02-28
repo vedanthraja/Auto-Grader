@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+
+    <!-- Google Fonts Start -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts Ends -->
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Lato", sans-serif;
+      }
+      body {
+        background-image: url("http://images.unsplash.com/photo-1507842217343-583bb7270b66?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxMjA3fDB8MXxzZWFyY2h8MXx8bGlicmFyeXx8MHx8fA&ixlib=rb-1.2.1&q=80&w=1080");
+        background-repeat: no-repeat;
+        background-size: cover;
+        object-fit: cover;
+        background-color: #cccccc;
+      }
+      .contain {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+      }
+      .left {
+        display: flex;
+        flex: 0.5;
+        align-items: center;
+        justify-content: center;
+        height: 90vh;
+      }
+      .right {
+        display: flex;
+        flex: 0.5;
+        align-items: center;
+        justify-content: center;
+        height: 90vh;
+      }
+      .box {
+        display: flex;
+        flex-direction: column;
+        flex: 0.5;
+        align-items: center;
+        justify-content: center;
+        height: 20rem;
+        border-radius: 24px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+        background: rgba(255, 255, 255, 0.25);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+      .nav {
+        position: sticky;
+        height: 10vh;
+        width: 100%;
+        background-color: black;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        /* display: none; */
+      }
+      button {
+        border: 0;
+        margin: 0;
+        background-color: black;
+        color: white;
+        padding: 0.75rem;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <h1>Hi there</h1> -->
+    <!-- <div class="nav">
+      <div style="position: fixed; left: 45px">App Name</div>
+      <div style="position: fixed; right: 45px">Login</div>
+    </div> -->
+    <div class="contain">
+      <div class="left">
+        <div class="box">
+          <h1>Login</h1>
+          <a href="{% url 'login' %}">
+            <button style="margin-top: 2rem"><h3>Login</h3></button>
+          </a>
+        </div>
+      </div>
+      <div class="right">
+        <div class="box">
+          <h1>Register</h1>
+          <div class="btn-cont" style="display: flex; flex-direction: row">
+            <a href="{% url 'RegisterStudent' %}">
+              <button style="margin-top: 2rem; margin-right: 1rem">
+                <h3>As a Student</h3>
+              </button>
+            </a>
+            <a href="{% url 'RegisterTeacher' %}">
+              <button style="margin-top: 2rem"><h3>As a Teacher</h3></button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

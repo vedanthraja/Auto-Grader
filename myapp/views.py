@@ -218,7 +218,7 @@ def result(request,pk1,pk2):
             ansq = Answer.objects.filter(question = i, student = studentobj )
             if ansq:
                 tot_grade+=ansq[0].grade
-    context = {'tot_grade':tot_grade}
+    context = {'tot_grade':tot_grade, 'pk2': pk2}
     att = Quiz_Attempted(quiz = quizq, student = studentobj, tot_grade = tot_grade)
     att.save()
     return render(request, 'result.html',context)
@@ -274,3 +274,6 @@ def quiz_questions(request,pk1,pk2,pk3):
     return render(request,"questions.html",params)
         
         
+def home(request):
+    return render(request, 'home.html')
+    
