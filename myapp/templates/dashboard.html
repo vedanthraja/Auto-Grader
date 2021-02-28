@@ -72,7 +72,9 @@
         >
           <h3 style="padding-bottom: 2rem">Navigation</h3>
           <a href="" style="color: black"><h4>Quiz List</h4></a>
-          <a href="{% url 'result' %}" style="color: black"><h4>Results</h4></a>
+          {% for i in q1 %}
+          <a href="{% url 'result' pk1=pk pk2=i.quiz_name %}" style="color: black"><h4>Results</h4></a>
+          {% endfor %}
         </div>
       </div>
       <div class="right-box">
@@ -101,7 +103,7 @@
           >
             <h4>Subject: {{i.teacher.subject}}</h4>
             <h4>Teacher: {{i.teacher.name}}</h4>
-            <a href=""><button>Start Attempt</button></a>
+            <a href="{% url 'quiz_start' pk1=pk pk2=i.quiz_name %}"><button>Start Attempt</button></a>
           </div>
           {% endfor %}
         </div>

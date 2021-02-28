@@ -140,11 +140,6 @@ def signin(request):
         form = LoginForm()
         return render(request, 'login.html', {"form":form})
 
-def dashboard_student(request,pk):
-    q1 = Quiz.objects.all()
-    context = {'q1':q1}
-    return render(request, 'dashboard.html',context)
-
 
 def Addquestion(request, pk):
     form = QuestionForm()
@@ -171,7 +166,7 @@ def Addquestion(request, pk):
 
 def dashboard_student(request,pk):
     q1 = Quiz.objects.all()
-    context = {'q1':q1}
+    context = {'q1':q1, "pk":pk}
     return render(request, 'dashboard.html',context)
     
 def dashboard_teacher(request,pk):
@@ -211,7 +206,7 @@ def result(request,pk1,pk2):
     #pk1 = username
     #pk2 = quiz_name
     tot_grade = 0
-    quizq = Quiz.objects.get(quiz_name = pk1)
+    quizq = Quiz.objects.get(quiz_name = pk2)
     studentobj = Student.objects.get(username = pk1)
     if quizq:
         quesq = Question.objects.filter(quiz = quizq)
@@ -219,11 +214,12 @@ def result(request,pk1,pk2):
             ansq = Answer.objects.filter(question = i, student = studentobj )
             if ansq:
                 tot_grade+=ansq[0].grade
-    context = {'tot_grade':tot_grade, 'pk2': pk2}
-    att = Quiz_Attempted(quiz = quizq, student = studentobj, tot_grade = tot_grade)
-    att.save()
+    context = {'tot_grade':tot_grade, 'pk2': pk2, 'pk1':pk1}
+    #att = Quiz_Attempted(quiz = quizq, student = studentobj, tot_grade = tot_grade)
+    #aatt.save()
+
     return render(request, 'result.html',context)
-    return render(request, 'dashboard.html',context)
+    # return render(request, 'dashboard.html',context)
 
 def quiz_start(request,pk1,pk2):
 
@@ -243,6 +239,7 @@ def quiz_start(request,pk1,pk2):
 def quiz_questions(request,pk1,pk2,pk3):
     quiz = Quiz.objects.filter(quiz_name=pk2).first()
     questions = Question.objects.filter(quiz=quiz)
+    ques = Question.objects.get(ques_id=pk3)
     id_arr = []
     for i in questions:
         id_arr.append(i.ques_id)
@@ -293,7 +290,7 @@ def quiz_questions(request,pk1,pk2,pk3):
             messages.info(request, "Answer submitted successfully")
 
         return redirect(quiz_questions,pk1=pk1,pk2=pk2,pk3=pk3)
-    params = {"arr":id_arr,"form":form,'pk1':pk1,'pk2':pk2,'pk3':pk3}
+    params = {"arr":id_arr,"form":form,'pk1':pk1,'pk2':pk2,'pk3':pk3,"ques":ques}
     return render(request,"questions.html",params)
         
         

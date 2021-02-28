@@ -34,44 +34,32 @@
           style="padding-right: 6rem; padding-left: 6rem; padding-top: 2rem"
         >
           <div class="number">
-            <span
+            <a href="{% url 'quiz_questions' pk1=pk1 pk2=pk2 pk3=1%}"><span
               style="background-color: pink; border-radius: 12px; padding: 1rem"
               >1</span
+            ></a>
+          </div>
+          
+          <div class="number">
+            <a href="{% url 'quiz_questions' pk1=pk1 pk2=pk2 pk3=2%}">
+            <span
+              style="background-color: pink; border-radius: 12px; padding: 1rem"
+              >2</span
             >
+          </a>
           </div>
           <div class="number">
+            <a href="{% url 'quiz_questions' pk1=pk1 pk2=pk2 pk3=3%}">
             <span
               style="background-color: pink; border-radius: 12px; padding: 1rem"
-              >1</span
+              >3</span
             >
+          </a>
           </div>
-          <div class="number">
-            <span
-              style="background-color: pink; border-radius: 12px; padding: 1rem"
-              >1</span
-            >
-          </div>
-          <div class="number">
-            <span
-              style="background-color: pink; border-radius: 12px; padding: 1rem"
-              >1</span
-            >
-          </div>
-          <div class="number">
-            <span
-              style="background-color: pink; border-radius: 12px; padding: 1rem"
-              >1</span
-            >
-          </div>
-          <div class="number">
-            <span
-              style="background-color: pink; border-radius: 12px; padding: 1rem"
-              >1</span
-            >
-          </div>
+          
         </div>
         <div class="submit-section">
-          <button
+          <a href="{% url 'result' pk1=pk1 pk2=pk2 %}"><button
             style="
               background-color: black;
               color: white;
@@ -83,13 +71,14 @@
           >
             Submit Test
           </button>
+          </a>
         </div>
       </div>
       <!-- SIDEBAR  ENDS -->
       <div class="content">
         <div class="question" style="transform: translateY(2rem)">
           <div class="ques">
-            <h1>Question</h1>
+            <h1>{{ques.ques_text}}</h1>
           </div>
           <div class="upload-sec">
             <form action="{% url 'quiz_questions' pk1=pk1 pk2=pk2 pk3=pk3 %}" method="POST" enctype="multipart/form-data">

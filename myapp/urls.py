@@ -14,5 +14,5 @@ urlpatterns = [
     path('<str:pk>/addquiz/', views.Addquiz, name="addquiz"),
     path('<str:pk1>/<str:pk2>/', views.quiz_start, name="quiz_start"),
     path('<str:pk1>/<str:pk2>/<str:pk3>/', views.quiz_questions, name="quiz_questions"),
-    path('dashboard_student/<str:pk>/result', views.result, name="result")
+    path('dashboard_student/<str:pk1>/<str:pk2>/result', views.result, name="result")
 ]
