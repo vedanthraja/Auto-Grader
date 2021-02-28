@@ -55,3 +55,11 @@ class QuestionForm(forms.ModelForm):
             'keywords': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Add Password'}),
             'total_marks': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Add Password'}),
             }
+    username = forms.CharField(label = 'Username', max_length = 12)
+    password = forms.CharField(label = 'Password',min_length = 6, widget = forms.PasswordInput())
+
+class AnswerForm(forms.ModelForm):
+
+    class Meta:
+        model = Answer
+        fields = ["image",]
