@@ -116,11 +116,8 @@ def signin(request):
             return redirect('dashboard_student',pk = pk)
         else:
             pk = request.user.username
-<<<<<<< HEAD
             return redirect('dashboard_teacher',pk = pk)
-=======
-            return redirect('dashboard_student',pk = pk)
->>>>>>> ce893ef5d00fede845872016d0781eb5f66f056a
+            # return redirect('dashboard_student',pk = pk)
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
@@ -147,7 +144,6 @@ def dashboard_student(request,pk):
     context = {'q1':q1}
     return render(request, 'dashboard.html',context)
 
-<<<<<<< HEAD
 
 def Addquestion(request, pk):
     form = QuestionForm()
@@ -210,7 +206,6 @@ def quiz_start(request,pk1,pk2, pk3):
 
     except: 
         return redirect('quiz_questions', pk1=pk1, pk2=pk2, pk3=pk3)
-=======
 def result(request,pk1,pk2):
     #pk1 = username
     #pk2 = quiz_name
@@ -243,7 +238,6 @@ def quiz_start(request,pk1,pk2):
         return redirect('dashboard_student', pk1)
     pk3 = id_arr[0]
     return redirect('quiz_questions', pk1=pk1, pk2=pk2, pk3=pk3)
->>>>>>> ce893ef5d00fede845872016d0781eb5f66f056a
 
 def quiz_questions(request,pk1,pk2,pk3):
     quiz = Quiz.objects.filter(quiz_name=pk2).first()
