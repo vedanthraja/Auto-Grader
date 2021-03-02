@@ -37,7 +37,7 @@ class Quiz(models.Model):
         return str(self.quiz_name)
 
 class Quiz_Attempted(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete = models.CASCADE)
+    # quiz = models.ForeignKey(Quiz, on_delete = models.CASCADE)
     student = models.ForeignKey(Student, on_delete = models.CASCADE)
     tot_grade = models.DecimalField(max_digits=3, decimal_places=0, null=True)
 

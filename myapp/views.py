@@ -140,6 +140,10 @@ def signin(request):
         form = LoginForm()
         return render(request, 'login.html', {"form":form})
 
+def signout(request):
+	logout(request)
+	return redirect('login')
+
 
 def Addquestion(request, pk):
     form = QuestionForm()
